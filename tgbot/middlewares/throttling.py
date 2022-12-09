@@ -112,8 +112,8 @@ class ThrottlingMiddleware(BaseMiddleware):
 
         if throttled.exceeded_count <= 2:
             await message.bot.send_sticker(message.chat.id,
-                                           "CAACAgIAAxkBAAIGAWONNoQtQhJgn80cqzS0hGwm-hulAALTAwACdOkzBkHtzpYLZQlYKwQ")
-            await message.reply('Не пиши слишком часто!')
+                                           "CAACAgIAAxkBAAINymOTUvMxJsIc3Zsl9rE4tZ8Rs5XAAAI0EQACGSJBSVH-i-pxbjOsKwQ")
+            await message.answer('Не пиши слишком часто!')
 
         # Sleep.
 

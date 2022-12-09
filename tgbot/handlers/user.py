@@ -2,16 +2,63 @@ from datetime import datetime
 
 import aiogram
 import psycopg2
+import qrcode
 from aiogram import Dispatcher
 from aiogram.dispatcher import FSMContext
 from aiogram.types import Message, ReplyKeyboardRemove
+from aiogram.utils.deep_linking import get_start_link
+from qrcode.image.styledpil import StyledPilImage
+from qrcode.image.styles.moduledrawers import RoundedModuleDrawer, GappedSquareModuleDrawer, CircleModuleDrawer, VerticalBarsDrawer, SquareModuleDrawer, HorizontalBarsDrawer
+from qrcode.image.styles.colormasks import RadialGradiantColorMask
 from tgbot.misc.states import Form, UserEvents
 from .template_messages.user_messages import vk_page, study_group, birthday, phone_number, food_feature, \
     evening_event, media_files, summary_msg, start_message, name_messages
 from tgbot.keyboards.reply import of_course
 from ..middlewares.throttling import rate_limit
 
-# ReplyKeyboardRemove()
+async def qr_code_registry(user_chat_id):
+    link = await get_start_link(f'{user_chat_id}', encode=True)
+    print(str(link))
+    qr = qrcode.QRCode(
+        version=3,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+    )
+    qr.add_data(link)
+    qr.make(fit=True)
+    img_2 = qr.make_image(image_factory=StyledPilImage,
+                          color_mask=RadialGradiantColorMask(
+                              back_color=(255, 255, 255),
+                              center_color=(51, 255, 255),
+                              edge_color=(0, 0, 153)
+                          ),
+                          module_drawer=SquareModuleDrawer())
+
+    img_2.save('./qr.png')
+    return "ok"
+
+def check_date(date: str):
+    date_format = "%d.%m.%Y"
+    res = True
+    try:
+        res = bool(datetime.strptime(date, date_format))
+    except ValueError:
+        res = False
+    return res
+
+def check_phone(phone: str):
+    if len(phone) == 12 or len(phone) == 11:
+        return True
+    else:
+        return False
+
+def check_tag(msg: str):
+    for ch in msg:
+        if ch in "<>'?|!@#$%^&*":
+            msg = msg.replace(ch, '_')
+    print(msg)
+    return msg
 
 
 @rate_limit(40)
@@ -201,13 +248,13 @@ async def user_menu(message: Message, state: UserEvents.main_menu):
         print("confirm {}".format(count))
         cursor.close()
         connection.close()
+        await qr_code_registry(int(message.chat.id))
+        ph = open("./qr.png", "rb")
+        await message.bot.send_photo(int(message.chat.id), ph)
+        ph.close()
+
     resp = message.text.find("помощь")
     print(resp)
-    # if resp > 0:
-    #     await message.bot.send_message(392875761, "user {} ask for help. problem = {}".format(message.chat.username, message.text))
-    # else:
-    #     await message.answer("хочешь конфетку - скушай конфетку")
-
 
 async def user_help(message: Message):
     await message.reply("контакты организаторов, которым можно писать в телеграм при возникновении проблем:"
@@ -229,26 +276,4 @@ def register_user(dp: Dispatcher):
     dp.register_message_handler(user_menu, state=UserEvents.main_menu, is_sticker=False)
 
 
-def check_date(date: str):
-    date_format = "%d.%m.%Y"
-    res = True
-    try:
-        res = bool(datetime.strptime(date, date_format))
-    except ValueError:
-        res = False
-    return res
 
-
-def check_phone(phone: str):
-    if len(phone) == 12 or len(phone) == 11:
-        return True
-    else:
-        return False
-
-
-def check_tag(msg: str):
-    for ch in msg:
-        if ch in "<>'?|!@#$%^&*":
-            msg = msg.replace(ch, '_')
-    print(msg)
-    return msg

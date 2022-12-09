@@ -168,11 +168,9 @@ async def process_callback_reg_info(callback_query: CallbackQuery):
             try:
                 await callback_query.bot.send_message(chat_id=int(row[0]), text=brdct_msg_confirm_registration, # 392875761 int(row[0])
                                                       reply_markup=confirm_reg)
-                await qr_code_registry(int(row[0]))
-                ph = open("./qr.png", "rb")
-                await callback_query.bot.send_photo(int(row[0]), ph)
-                ph.close()
+
                 time.sleep(1)
+                await qr_code_registry(int(row[0]))
             except:
                 print("ERROR")
                 continue
@@ -181,6 +179,7 @@ async def process_callback_reg_info(callback_query: CallbackQuery):
 
     if code == '4':
         await callback_query.answer("со всем уважением! Ты дебил")
+        # todo make final braodcast
 
 
 def register_admin(dp: Dispatcher):

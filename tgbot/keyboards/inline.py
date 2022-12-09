@@ -5,7 +5,7 @@ admins = InlineKeyboardButton('рассылка на админов', callback_d
 admin_broadcast = InlineKeyboardMarkup().add(users, admins)
 
 ready = InlineKeyboardButton('подтвердить реги', callback_data='btn3')
-admins = InlineKeyboardButton('назвать админов дибилами', callback_data='btn4')
+admins = InlineKeyboardButton('финальная рассылка', callback_data='btn4')
 
 broadcast = InlineKeyboardMarkup()
 broadcast.row(ready)
