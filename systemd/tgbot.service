@@ -1,14 +1,15 @@
 [Unit]
-Description=Course Bot
+Description=bmstu Bot
 After=network.target
 
 [Service]
-User=tgbot
+User=root
 Group=tgbot
 Type=simple
 WorkingDirectory=/opt/tgbot
-ExecStart=/opt/tgbot/venv/bin/python bot.py
+ExecStart=/root/tgbot/bmstutgnybot/venv/bin/python bot.py run
 Restart=always
+RestartSec=1
 
 [Install]
 WantedBy=multi-user.target
