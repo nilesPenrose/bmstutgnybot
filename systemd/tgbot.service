@@ -1,13 +1,9 @@
 [Unit]
-Description=bmstu Bot
-After=network.target
-
+Description=bmstuBot
 [Service]
-User=root
-Group=tgbot
 Type=simple
-WorkingDirectory=/opt/tgbot
-ExecStart=/root/tgbot/bmstutgnybot/venv/bin/python bot.py run
+WorkingDirectory=/home/gnom/Documents/tg_bots/tgbot_template-master
+ExecStart=/bin/bash -c 'cd /home/gnom/Documents/tg_bots/tgbot_template-master/ && source venv/bin/activate && python bot.py run'
 Restart=always
 RestartSec=1
 

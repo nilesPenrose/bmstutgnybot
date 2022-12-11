@@ -258,11 +258,11 @@ async def user_menu(message: Message, state: UserEvents.main_menu):
 
 async def user_help(message: Message):
     await message.reply("контакты организаторов, которым можно писать в телеграм при возникновении проблем:"
-                        "\nhttps://t.me/niles_penrose,\nhttps://t.me/true_psinu")
-
+                        "\nhttps://t.me/niles_penrose,\nhttps://t.me/cot_boris_13,\nhttps://t.me/andrew_yas")
+                        #\nhttps://t.me/true_psinu
 
 def register_user(dp: Dispatcher):
-    dp.register_message_handler(user_start, commands=["start"], state="*")
+    dp.register_message_handler(user_start, commands=["start"], state="*", is_admin=False)
     dp.register_message_handler(user_help, commands=["help"], state="*")
     dp.register_message_handler(process_start, state=Form.start, is_sticker=False)
     dp.register_message_handler(process_name, state=Form.name, is_sticker=False)

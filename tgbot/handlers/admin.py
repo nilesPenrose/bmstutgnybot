@@ -120,6 +120,19 @@ async def admin_menu(message: Message, state=AdminEvents.main_menu):
 
         await message.bot.send_photo(message.chat.id, ph)
 
+
+    elif message.text == "food_features":
+        connection = psycopg2.connect(host="127.0.0.1", port="5432", dbname="new_year", user="postgres",
+                                      password="qwerty")
+        cursor = connection.cursor()
+        postgres_insert_query = """ select chat_id from clients;"""
+
+        cursor.execute(postgres_insert_query)
+        clients = cursor.fetchall()
+        for row in clients:
+            print(row[0])
+            await message.bot.send_message()
+
     else:
         if message.sticker:
             await message.bot.send_sticker(message.chat.id,
