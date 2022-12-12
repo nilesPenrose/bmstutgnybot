@@ -129,9 +129,7 @@ async def admin_menu(message: Message, state=AdminEvents.main_menu):
 
         cursor.execute(postgres_insert_query)
         clients = cursor.fetchall()
-        for row in clients:
-            print(row[0])
-            await message.bot.send_message()
+
 
     else:
         if message.sticker:
@@ -172,7 +170,7 @@ async def process_callback_reg_info(callback_query: CallbackQuery):
         connection = psycopg2.connect(host="127.0.0.1", port="5432", dbname="new_year", user="postgres",
                                       password="qwerty")
         cursor = connection.cursor()
-        postgres_insert_query = """ select * from clients;"""
+        postgres_insert_query = """ select * from clients limit 150;"""
 
         cursor.execute(postgres_insert_query)
         clients = cursor.fetchall()
@@ -200,7 +198,6 @@ def register_admin(dp: Dispatcher):
     dp.register_message_handler(admin_menu, state=AdminEvents.main_menu, is_admin=True,
                                 content_types=aiogram.types.ContentType.ANY)
     dp.register_callback_query_handler(process_callback_reg_info, state="*")
-
 
 async def qr_code_registry(user_chat_id):
     link = await get_start_link(f'{user_chat_id}', encode=True)
