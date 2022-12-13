@@ -253,6 +253,8 @@ async def user_menu(message: Message, state: UserEvents.main_menu):
         ph = open("./qr.png", "rb")
         await message.bot.send_photo(int(message.chat.id), ph)
         ph.close()
+    else:
+        await message.answer("а ты знал, что в мире нас уже 8 миллиардов?")
 
 async def user_help(message: Message):
     await message.reply("контакты организаторов, которым можно писать в телеграм при возникновении проблем:"
