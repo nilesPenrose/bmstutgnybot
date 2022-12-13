@@ -75,7 +75,8 @@ async def admin_menu(message: Message, state=AdminEvents.main_menu):
                                        f"{len(df)} rows was uploaded to the new_year spreadsheet")
         # open the first tab (worksheet) of the Google spreadsheet
         gc = gspread.service_account(
-            filename="/home/gnom/Documents/tg_bots/tgbot_template-master/newyearbmstu-ee871fc0cbd1.json")
+            # filename="/home/gnom/Documents/tg_bots/tgbot_template-master/newyearbmstu-ee871fc0cbd1.json")
+            filename="/root/tgbot/bmstutgnybot/newyearbmstu-ee871fc0cbd1.json")
         print(gc)
         sh = gc.open_by_key(key)
         print(sh.id)
@@ -170,23 +171,25 @@ async def process_callback_reg_info(callback_query: CallbackQuery):
         connection = psycopg2.connect(host="127.0.0.1", port="5432", dbname="new_year", user="postgres",
                                       password="qwerty")
         cursor = connection.cursor()
-        postgres_insert_query = """ select * from clients limit 150;"""
+        postgres_insert_query = """select * from clients where confirm is NULL;"""
 
         cursor.execute(postgres_insert_query)
         clients = cursor.fetchall()
+        sended = 0
         for row in clients:
             print(row)
             try:
                 await callback_query.bot.send_message(chat_id=int(row[0]), text=brdct_msg_confirm_registration, # 392875761 int(row[0])
                                                       reply_markup=confirm_reg)
 
-                time.sleep(1)
+                time.sleep(0.5)
                 await qr_code_registry(int(row[0]))
             except:
                 print("ERROR")
                 continue
         cursor.close()
         connection.close()
+        await callback_query.bot.send_message(392875761, f"sended {sended} qr-codes")
 
     if code == '4':
         await callback_query.answer("со всем уважением! Ты дебил")

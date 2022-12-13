@@ -233,7 +233,7 @@ async def user_menu(message: Message, state: UserEvents.main_menu):
         print("confirm {}".format(count))
         cursor.close()
         connection.close()
-
+        await message.bot.send_message(392875761, "НЕТ")
 
     elif message.text == "ДА🌟":
         await message.answer("Отлично! Прикрепляем твой индивидуальный qr-код, который необходимо будет показать нашим организаторам на регистрации перед отъездом. Только по нему ты сможешь попасть на наше мероприятие! Если остались вопросы, то можешь их задать Анастасии (http://t.me/cot_boris_13). Увидимся 16 декабря в 18:30🎄", reply_markup=ReplyKeyboardRemove())
@@ -245,6 +245,7 @@ async def user_menu(message: Message, state: UserEvents.main_menu):
         cursor.execute(query)
         connection.commit()
         count = cursor.rowcount
+        await message.bot.send_message(392875761, "ДА")
         print("confirm {}".format(count))
         cursor.close()
         connection.close()
@@ -252,9 +253,6 @@ async def user_menu(message: Message, state: UserEvents.main_menu):
         ph = open("./qr.png", "rb")
         await message.bot.send_photo(int(message.chat.id), ph)
         ph.close()
-
-    resp = message.text.find("помощь")
-    print(resp)
 
 async def user_help(message: Message):
     await message.reply("контакты организаторов, которым можно писать в телеграм при возникновении проблем:"

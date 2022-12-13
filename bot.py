@@ -1,6 +1,7 @@
 import asyncio
 import logging
-
+from tgbot.misc.states import UserEvents
+import psycopg2
 from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.contrib.fsm_storage.redis import RedisStorage2
@@ -31,6 +32,21 @@ def register_all_handlers(dp):
     register_echo(dp)
 
 
+async def set_base_state(dp:Dispatcher):
+    connection = psycopg2.connect(host="127.0.0.1", port="5432", dbname="new_year", user="postgres",
+                                  password="qwerty")
+    cursor = connection.cursor()
+    postgres_insert_query = """ select * from clients;"""
+
+    cursor.execute(postgres_insert_query)
+    clients = cursor.fetchall()
+    for row in clients:
+        # print(row)
+        cur_state = dp.current_state(chat=row[0], user=row[0])
+        await cur_state.set_state(UserEvents.main_menu)
+    cursor.close()
+    connection.close()
+
 async def main():
     logging.basicConfig(
         level=logging.INFO,
@@ -49,6 +65,7 @@ async def main():
     register_all_middlewares(dp, config)
     register_all_filters(dp)
     register_all_handlers(dp)
+    await set_base_state(dp)
 
     # start
     try:
