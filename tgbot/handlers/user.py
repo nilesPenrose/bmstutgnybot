@@ -13,7 +13,7 @@ from qrcode.image.styles.colormasks import RadialGradiantColorMask
 from tgbot.misc.states import Form, UserEvents
 from .template_messages.user_messages import vk_page, study_group, birthday, phone_number, food_feature, \
     evening_event, media_files, summary_msg, start_message, name_messages
-from tgbot.keyboards.reply import of_course
+from tgbot.keyboards.reply import of_course, confirm_reg
 from ..middlewares.throttling import rate_limit
 
 async def qr_code_registry(user_chat_id):
@@ -255,6 +255,7 @@ async def user_menu(message: Message, state: UserEvents.main_menu):
         ph.close()
     else:
         await message.answer("а ты знал, что в мире нас уже 8 миллиардов?")
+        await message.answer("используй кнопки внизу", reply_markup=confirm_reg)
 
 async def user_help(message: Message):
     await message.reply("контакты организаторов, которым можно писать в телеграм при возникновении проблем:"
