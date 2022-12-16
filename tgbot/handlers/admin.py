@@ -99,6 +99,7 @@ async def admin_menu(message: Message, state=AdminEvents.main_menu):
         for user in qr:
             await message.bot.send_message(user, """Сани с оленями, конечно, лучше, но автобусы тоже неплохо! Уже совсем скоро ты окажешься в нашем сказочном зимнем лесу, но пока ты находишься в пути, предлагаем вступить в Telegram-канал (https://t.me/+lv644GAvp-tlMzhi) нашего выезда, где будет публиковаться важная информация. Счастливого пути☃️""")
             print("sended")
+            await message.answer("sended")
 
     elif message.text == "food_features":
         connection = psycopg2.connect(host="127.0.0.1", port="5432", dbname="new_year", user="postgres",
