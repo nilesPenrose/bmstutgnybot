@@ -95,31 +95,9 @@ async def admin_menu(message: Message, state=AdminEvents.main_menu):
                                                         "в будущем здесь будет сводная информация")
 
     elif message.text == "qr":
-
-        link = await get_start_link(f'{message.chat.id}', encode=True)
-        print(str(link))
-        qr = qrcode.QRCode(
-            version=3,
-            error_correction=qrcode.constants.ERROR_CORRECT_L,
-            box_size=10,
-            border=4,
-        )
-        qr.add_data(link)
-        qr.make(fit=True)
-        img_2 = qr.make_image(image_factory=StyledPilImage,
-                              color_mask=RadialGradiantColorMask(
-                                  back_color = (255,255,255),
-                                  center_color = (51,255,255),
-                                  edge_color = (0,0,153)
-                              ),
-                              module_drawer=HorizontalBarsDrawer())
-
-        img_2.save('./qr.png')
-        ph = open("./qr.png", "rb")
-
-        # ph = open(img)
-
-        await message.bot.send_photo(message.chat.id, ph)
+        qr = [999180114, 2032165872, 1259684778, 1076614283, 889093865, 2009938159, 2009938159]
+        for user in qr:
+            await message.bot.send_message(user, """Сани с оленями, конечно, лучше, но автобусы тоже неплохо! Уже совсем скоро ты окажешься в нашем сказочном зимнем лесу, но пока ты находишься в пути, предлагаем вступить в Telegram-канал (https://t.me/+lv644GAvp-tlMzhi) нашего выезда, где будет публиковаться важная информация. Счастливого пути☃️""")
 
 
     elif message.text == "food_features":
@@ -181,7 +159,7 @@ async def process_callback_reg_info(callback_query: CallbackQuery):
             try:
                 await callback_query.bot.send_message(chat_id=int(row[0]), text=brdct_msg_confirm_registration, # 392875761 int(row[0])
                                                       reply_markup=confirm_reg)
-
+                sended+=1
                 time.sleep(0.5)
                 await qr_code_registry(int(row[0]))
             except:
